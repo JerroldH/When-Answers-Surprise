@@ -1,0 +1,80 @@
+connection:
+  username_env: WRDS_USER
+
+export:
+  output_dir: ./data/wrds_sp500_2018_2025/raw/wrds_exports
+  format: parquet
+  compression: snappy
+  chunksize: 250000
+  overwrite: false
+  resume: true
+  max_retries: 3
+  continue_on_error: false
+
+query:
+  name: ibes_act_epsus_sp500
+  sql: |
+    WITH sp500_permnos AS (
+      SELECT DISTINCT permno
+      FROM crsp.dsp500list_v2
+      WHERE mbrstartdt <= DATE '2025-12-31'
+        AND COALESCE(mbrenddt, DATE '9999-12-31') >= DATE '2018-01-01'
+    ),
+    sp500_tickers AS (
+      SELECT DISTINCT UPPER(n.ticker) AS ticker
+      FROM crsp.dsenames AS n
+      JOIN sp500_permnos AS u
+        ON n.permno = u.permno
+      WHERE n.ticker IS NOT NULL
+        AND COALESCE(n.namedt, DATE '1900-01-01') <= DATE '2025-12-31'
+        AND COALESCE(n.nameendt, DATE '9999-12-31') >= DATE '2018-01-01'
+    )
+    SELECT
+      a.ticker,
+      a.cusip,
+      a.oftic,
+      a.cname,
+      a.pends AS fpedats,
+      a.measure,
+      a.pdicity,
+      a.anndats AS anndats_act,
+      a.anntims AS anntims_act,
+      a.actdats,
+      a.acttims,
+      a.value AS actual,
+      a.curr_act,
+      a.usfirm
+    FROM ibes.act_epsus AS a
+    WHERE a.pends >= %(start_date)s
+      AND a.pends < %(end_date)s
+      AND a.pends >= DATE '2017-01-01'
+      AND a.pends < DATE '2026-02-01'
+      AND a.measure = 'EPS'
+      AND a.pdicity = 'QTR'
+      AND (
+        EXISTS (
+          SELECT 1
+          FROM wrdsapps_link_crsp_ibes.ibcrsphist AS l
+          JOIN sp500_permnos AS u
+            ON l.permno = u.permno
+          WHERE (a.ticker = l.ticker OR a.oftic = l.ticker)
+            AND a.pends >= COALESCE(l.sdate, DATE '1900-01-01')
+            AND a.pends <= COALESCE(l.edate, DATE '9999-12-31')
+        )
+        OR UPPER(a.oftic) IN (SELECT ticker FROM sp500_tickers)
+        OR UPPER(a.ticker) IN (SELECT ticker FROM sp500_tickers)
+      )
+  partition:
+    type: year
+    start: 2017
+    end: 2026
+  date_columns:
+    - fpedats
+    - anndats_act
+    - actdats
+  integrity:
+    non_null_columns:
+      - ticker
+      - fpedats
+      - measure
+      - actual

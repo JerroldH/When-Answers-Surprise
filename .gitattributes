@@ -1,0 +1,6 @@
+* text=auto eol=lf
+*.pdf binary
+paper_results/** -text
+design/** -text
+configs/wrds_holdout_2025/holdout_protocol.json -text
+

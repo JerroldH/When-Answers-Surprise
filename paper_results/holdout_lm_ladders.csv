@@ -1,0 +1,5 @@
+scorer,sample,component,variant,n_turns,n_calls,n_features,oof_r2,oof_mae,predicted_actual_correlation,calibration_slope,turn_residual_sd,mean_fold_r2,learner,scope
+LM dictionary,holdout_2025,answer,A0,34001,1954,29,0.0278200825309,12.6916606292,0.168336263509,0.981547023527,22.2788105163,0.0278200825309,time_forward_tuned_ridge,holdout_2025
+LM dictionary,holdout_2025,answer,A1,34001,1954,38,0.0322933172914,12.6745579619,0.179989112575,0.948355430087,22.2332176422,0.0322933172914,time_forward_tuned_ridge,holdout_2025
+LM dictionary,holdout_2025,answer,A2,34001,1954,42,0.0382690558034,12.503837784,0.196849874892,0.899908298895,22.16452449,0.0382690558034,time_forward_tuned_ridge,holdout_2025
+LM dictionary,holdout_2025,answer,A3,34001,1954,58,0.0425676677762,12.4439837602,0.207137322638,0.919307328128,22.1148635565,0.0425676677762,time_forward_tuned_ridge,holdout_2025

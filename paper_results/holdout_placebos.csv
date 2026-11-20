@@ -1,0 +1,7 @@
+sample,period,stage,specification,treatment,window,outcome,coefficient_bps,se_bps,ci_low_bps,ci_high_bps,p_value,n_calls,n_firms,n_event_dates,unit,uncertainty
+holdout_2025,2025,Prepared,P0,prepared_innovation_z,"CAR[-10,-6]",placebo_CAR_m10_m6,12.3791139365,10.0387468896,-7.29646841708,32.0546962901,0.217526003542,1901,499,173,bps_per_1sd,pointwise_firm_date_two_way_clustered
+holdout_2025,2025,Question,Q2,question_innovation_z,"CAR[-10,-6]",placebo_CAR_m10_m6,17.3130887959,14.018777784,-10.163210768,44.7893883597,0.216833205869,1901,499,173,bps_per_1sd,pointwise_firm_date_two_way_clustered
+holdout_2025,2025,Answer,A3,answer_innovation_z,"CAR[-10,-6]",placebo_CAR_m10_m6,8.50961417611,11.4035389449,-13.8409114523,30.8601398045,0.455531067515,1901,499,173,bps_per_1sd,pointwise_firm_date_two_way_clustered
+holdout_2025,2025,Prepared,P0,prepared_innovation_z,"CAR[-5,-1]",placebo_CAR_m5_m1,-3.13000322715,12.767925509,-28.1546773821,21.8946709278,0.806343546556,1901,499,173,bps_per_1sd,pointwise_firm_date_two_way_clustered
+holdout_2025,2025,Question,Q2,question_innovation_z,"CAR[-5,-1]",placebo_CAR_m5_m1,18.0845864895,14.308327917,-9.95922090688,46.1283938859,0.20625862535,1901,499,173,bps_per_1sd,pointwise_firm_date_two_way_clustered
+holdout_2025,2025,Answer,A3,answer_innovation_z,"CAR[-5,-1]",placebo_CAR_m5_m1,8.63494487075,8.7051479249,-8.42683154213,25.6967212836,0.321229012138,1901,499,173,bps_per_1sd,pointwise_firm_date_two_way_clustered

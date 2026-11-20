@@ -1,0 +1,4 @@
+sample,period,stage,specification,term,treatment,outcome,coefficient_bps,se_bps,ci_low_bps,ci_high_bps,p_value,n_calls,unit,uncertainty
+pooled_2020_2025,2020-2025,Prepared,P0,P0 x 2025,prepared_innovation_z_x_holdout_2025,CAR_0_1,19.7942311016,19.5474958432,-18.518156739,58.1066189422,0.311240582021,11484,bps_per_1sd,firm_date_two_way_clustered
+pooled_2020_2025,2020-2025,Question,Q2,Q2 x 2025,question_innovation_z_x_holdout_2025,CAR_0_1,55.9327962565,23.3174161001,10.2315004878,101.634092025,0.0164508640493,11484,bps_per_1sd,firm_date_two_way_clustered
+pooled_2020_2025,2020-2025,Answer,A3,A3 x 2025,answer_innovation_z_x_holdout_2025,CAR_0_1,13.2086880274,15.8185128293,-17.795027407,44.2124034618,0.403709528453,11484,bps_per_1sd,firm_date_two_way_clustered

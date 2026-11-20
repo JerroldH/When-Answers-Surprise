@@ -1,0 +1,36 @@
+holdout_keep_partition: true
+
+connection:
+  username_env: WRDS_USER
+
+export:
+  output_dir: ./data/wrds_holdout_2025_ciz/raw/wrds_exports
+  format: parquet
+  compression: snappy
+  chunksize: 250000
+  overwrite: false
+  resume: false
+  max_retries: 3
+  continue_on_error: false
+
+query:
+  name: crsp_ciz_daily_index_holdout
+  sql: |
+    SELECT
+      dlycaldt,
+      vwretd
+    FROM crsp.wrds_dailyindexret_query
+    WHERE dlycaldt >= %(start_date)s
+      AND dlycaldt < %(end_date)s
+      AND dlycaldt >= DATE '2023-09-01'
+      AND dlycaldt < DATE '2026-01-01'
+  partition:
+    type: year
+    start: 2023
+    end: 2025
+  date_columns:
+    - dlycaldt
+  integrity:
+    non_null_columns:
+      - dlycaldt
+      - vwretd

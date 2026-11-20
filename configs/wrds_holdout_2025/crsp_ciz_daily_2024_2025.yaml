@@ -1,0 +1,55 @@
+holdout_keep_partition: true
+
+connection:
+  username_env: WRDS_USER
+
+export:
+  output_dir: ./data/wrds_holdout_2025_ciz/raw/wrds_exports
+  format: parquet
+  compression: snappy
+  chunksize: 250000
+  overwrite: false
+  resume: false
+  max_retries: 3
+  continue_on_error: false
+
+query:
+  name: crsp_ciz_daily_holdout
+  sql: |
+    WITH sp500_permnos AS (
+      SELECT DISTINCT permno
+      FROM crsp.dsp500list_v2
+      WHERE mbrstartdt <= DATE '2025-12-31'
+        AND COALESCE(mbrenddt, DATE '9999-12-31') >= DATE '2023-09-01'
+    )
+    SELECT
+      a.permno,
+      a.permco,
+      a.dlycaldt,
+      a.cusip,
+      a.dlyprc,
+      a.dlyvol,
+      a.dlyret,
+      a.dlyretx,
+      a.dlycap,
+      a.dlycumfacpr,
+      a.dlycumfacshr
+    FROM crsp.dsf_v2 AS a
+    JOIN sp500_permnos AS u
+      ON a.permno = u.permno
+    WHERE a.dlycaldt >= %(start_date)s
+      AND a.dlycaldt < %(end_date)s
+      AND a.dlycaldt >= DATE '2023-09-01'
+      AND a.dlycaldt < DATE '2026-01-01'
+  partition:
+    type: year
+    start: 2023
+    end: 2025
+  date_columns:
+    - dlycaldt
+  integrity:
+    non_null_columns:
+      - permno
+      - dlycaldt
+      - dlyprc
+      - dlyret

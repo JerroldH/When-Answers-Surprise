@@ -1,0 +1,9 @@
+sample,period,check,variant,coefficient_bps,standard_error_bps,p_value,n_obs,unit
+development_2020_2024,2020-2024,aggregation,word_weighted_mean,34.3196785135,6.55173226002,1.62097395236e-07,9583,bps_per_1sd
+development_2020_2024,2020-2024,aggregation,equal_turn_mean,21.1008384521,6.30577212694,0.000819055509272,9583,bps_per_1sd
+development_2020_2024,2020-2024,aggregation,within_call_median,29.6368928726,6.51392785351,5.37038261874e-06,9583,bps_per_1sd
+development_2020_2024,2020-2024,learner,fixed_ridge,35.2004722813,7.02152409612,,9583,bps_per_1sd
+development_2020_2024,2020-2024,learner,tuned_ridge,36.136588423,6.56299167685,,9583,bps_per_1sd
+development_2020_2024,2020-2024,learner,tuned_elasticnet,36.9391932216,6.48928619784,,9583,bps_per_1sd
+development_2020_2024,2020-2024,learner,tuned_hist_gradient_boosting,28.7531611484,6.64711214646,,9583,bps_per_1sd
+development_2020_2024,2020-2024,learner,tuned_random_forest,28.706354916,6.47569800964,,9583,bps_per_1sd

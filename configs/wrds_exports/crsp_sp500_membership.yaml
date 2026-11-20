@@ -1,0 +1,37 @@
+connection:
+  username_env: WRDS_USER
+
+export:
+  output_dir: ./data/wrds_sp500_2018_2025/raw/wrds_exports
+  format: parquet
+  compression: snappy
+  chunksize: 250000
+  overwrite: false
+  resume: true
+  max_retries: 3
+  continue_on_error: false
+
+query:
+  name: crsp_sp500_membership
+  sql: |
+    SELECT
+      permno,
+      indno,
+      mbrstartdt,
+      mbrenddt,
+      mbrflg,
+      indfam
+    FROM crsp.dsp500list_v2
+    WHERE mbrstartdt <= DATE '2025-12-31'
+      AND COALESCE(mbrenddt, DATE '9999-12-31') >= DATE '2018-01-01'
+  partition:
+    type: year
+    start: 2018
+    end: 2018
+  date_columns:
+    - mbrstartdt
+    - mbrenddt
+  integrity:
+    non_null_columns:
+      - permno
+      - mbrstartdt

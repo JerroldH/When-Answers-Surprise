@@ -1,0 +1,108 @@
+connection:
+  username_env: WRDS_USER
+
+export:
+  output_dir: ./data/wrds_sp500_2018_2025/raw/wrds_exports
+  format: parquet
+  compression: snappy
+  chunksize: 50000
+  overwrite: false
+  resume: true
+  max_retries: 3
+  continue_on_error: false
+
+query:
+  name: ciq_transcript_components_sp500
+  sql: |
+    WITH sp500_companyids AS (
+      SELECT DISTINCT
+        l.gvkey,
+        g.companyid,
+        COALESCE(n.namedt, DATE '1900-01-01') AS namedt,
+        COALESCE(n.nameendt, DATE '9999-12-31') AS nameendt,
+        COALESCE(m.mbrstartdt, DATE '1900-01-01') AS mbrstartdt,
+        COALESCE(m.mbrenddt, DATE '9999-12-31') AS mbrenddt,
+        COALESCE(l.linkdt, DATE '1900-01-01') AS linkdt,
+        COALESCE(l.linkenddt, DATE '9999-12-31') AS linkenddt
+      FROM crsp.dsp500list_v2 AS m
+      JOIN crsp.dsenames AS n
+        ON n.permno = m.permno
+      JOIN crsp.ccmxpf_linktable AS l
+        ON l.lpermno = m.permno
+      JOIN ciq_common.wrds_gvkey AS g
+        ON g.gvkey = l.gvkey
+      WHERE m.mbrstartdt <= DATE '2025-12-31'
+        AND COALESCE(m.mbrenddt, DATE '9999-12-31') >= DATE '2018-01-01'
+        AND COALESCE(n.namedt, DATE '1900-01-01') <= DATE '2025-12-31'
+        AND COALESCE(n.nameendt, DATE '9999-12-31') >= DATE '2018-01-01'
+        AND COALESCE(l.linkdt, DATE '1900-01-01') <= DATE '2025-12-31'
+        AND COALESCE(l.linkenddt, DATE '9999-12-31') >= DATE '2018-01-01'
+        AND n.ticker IS NOT NULL
+        AND g.companyid IS NOT NULL
+    ),
+    latest_events AS (
+      SELECT
+        d.transcriptid,
+        d.keydevid,
+        ROW_NUMBER() OVER (
+          PARTITION BY d.keydevid
+          ORDER BY
+            d.transcriptcreationdate_utc DESC NULLS LAST,
+            d.transcriptcreationtime_utc DESC NULLS LAST,
+            d.transcriptid DESC
+        ) AS version_rank
+      FROM ciq_transcripts.wrds_transcript_detail AS d
+      JOIN sp500_companyids AS s
+        ON d.companyid = s.companyid
+      WHERE d.mostimportantdateutc >= %(start_date)s
+        AND d.mostimportantdateutc < %(end_date)s
+        AND d.mostimportantdateutc >= DATE '2018-01-01'
+        AND d.mostimportantdateutc < DATE '2026-01-01'
+        AND d.mostimportantdateutc >= s.namedt
+        AND d.mostimportantdateutc <= s.nameendt
+        AND d.mostimportantdateutc >= s.mbrstartdt
+        AND d.mostimportantdateutc <= s.mbrenddt
+        AND d.mostimportantdateutc >= s.linkdt
+        AND d.mostimportantdateutc <= s.linkenddt
+        AND d.keydeveventtypename IN (
+          'Earnings Calls',
+          'Company Conference Presentations',
+          'Special Calls',
+          'Shareholder/Analyst Calls',
+          'Analyst/Investor Day'
+        )
+    )
+    SELECT
+      c.transcriptcomponentid,
+      c.transcriptid,
+      c.componentorder,
+      c.transcriptcomponenttypeid,
+      ct.transcriptcomponenttypename AS componenttypename,
+      c.transcriptpersonid,
+      p.transcriptpersonname AS personname,
+      p.proid,
+      p.companyname AS speaker_companyname,
+      p.speakertypeid,
+      c.componenttext
+    FROM ciq_transcripts.ciqtranscriptcomponent AS c
+    JOIN latest_events AS e
+      ON c.transcriptid = e.transcriptid
+     AND e.version_rank = 1
+    LEFT JOIN ciq_transcripts.ciqtranscriptcomponenttype AS ct
+      ON c.transcriptcomponenttypeid = ct.transcriptcomponenttypeid
+    LEFT JOIN ciq_transcripts.ciqtranscriptperson AS p
+      ON c.transcriptpersonid = p.transcriptpersonid
+    ORDER BY
+      c.transcriptid,
+      c.componentorder,
+      c.transcriptcomponentid
+  partition:
+    type: year
+    start: 2018
+    end: 2025
+  date_columns: []
+  integrity:
+    non_null_columns:
+      - transcriptid
+      - componentorder
+      - componenttext

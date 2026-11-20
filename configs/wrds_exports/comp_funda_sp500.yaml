@@ -1,0 +1,71 @@
+connection:
+  username_env: WRDS_USER
+
+export:
+  output_dir: ./data/wrds_sp500_2018_2025/raw/wrds_exports
+  format: parquet
+  compression: snappy
+  chunksize: 250000
+  overwrite: false
+  resume: true
+  max_retries: 3
+  continue_on_error: false
+
+query:
+  name: comp_funda_sp500
+  sql: |
+    WITH sp500_gvkeys AS (
+      SELECT DISTINCT l.gvkey
+      FROM crsp.ccmxpf_linktable AS l
+      JOIN crsp.dsp500list_v2 AS m
+        ON l.lpermno = m.permno
+      WHERE m.mbrstartdt <= DATE '2025-12-31'
+        AND COALESCE(m.mbrenddt, DATE '9999-12-31') >= DATE '2018-01-01'
+        AND COALESCE(l.linkdt, DATE '1900-01-01') <= DATE '2025-12-31'
+        AND COALESCE(l.linkenddt, DATE '9999-12-31') >= DATE '2018-01-01'
+        AND l.gvkey IS NOT NULL
+    )
+    SELECT
+      gvkey,
+      tic,
+      conm,
+      cusip,
+      cik,
+      datadate,
+      fyear,
+      fyr,
+      datafmt,
+      indfmt,
+      consol,
+      costat,
+      curcd,
+      at,
+      ceq,
+      sale,
+      revt,
+      ni,
+      oibdp,
+      prcc_f,
+      csho,
+      mkvalt,
+      xrd,
+      xsga
+    FROM comp.funda
+    WHERE datadate >= %(start_date)s
+      AND datadate < %(end_date)s
+      AND datadate >= DATE '2018-01-01'
+      AND datadate < DATE '2026-01-01'
+      AND datafmt = 'STD'
+      AND indfmt = 'INDL'
+      AND consol = 'C'
+      AND gvkey IN (SELECT gvkey FROM sp500_gvkeys)
+  partition:
+    type: year
+    start: 2018
+    end: 2025
+  date_columns:
+    - datadate
+  integrity:
+    non_null_columns:
+      - gvkey
+      - datadate

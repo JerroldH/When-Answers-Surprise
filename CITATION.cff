@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "Please cite the ICAIF paper when using this replication package."
+title: "When Answers Surprise: Sequential Tone Residualization and Abnormal Returns in Earnings Calls"
+type: software
+authors:
+  - family-names: Huang
+    given-names: Jerrold
+    orcid: "https://orcid.org/0009-0005-8617-040X"
+  - family-names: Zhang
+    given-names: Nathan
+    orcid: "https://orcid.org/0009-0005-5004-9800"
+preferred-citation:
+  type: conference-paper
+  title: "When Answers Surprise: Sequential Tone Residualization and Abnormal Returns in Earnings Calls"
+  authors:
+    - family-names: Huang
+      given-names: Jerrold
+    - family-names: Zhang
+      given-names: Nathan
+  doi: 10.1145/3858063.3858890
+  year: 2026
+

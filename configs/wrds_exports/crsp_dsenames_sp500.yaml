@@ -1,0 +1,54 @@
+connection:
+  username_env: WRDS_USER
+
+export:
+  output_dir: ./data/wrds_sp500_2018_2025/raw/wrds_exports
+  format: parquet
+  compression: snappy
+  chunksize: 250000
+  overwrite: false
+  resume: true
+  max_retries: 3
+  continue_on_error: false
+
+query:
+  name: crsp_dsenames_sp500
+  sql: |
+    WITH sp500_permnos AS (
+      SELECT DISTINCT permno
+      FROM crsp.dsp500list_v2
+      WHERE mbrstartdt <= DATE '2025-12-31'
+        AND COALESCE(mbrenddt, DATE '9999-12-31') >= DATE '2018-01-01'
+    )
+    SELECT
+      n.permno,
+      n.namedt,
+      n.nameendt,
+      n.shrcd,
+      n.exchcd,
+      n.siccd,
+      n.ncusip,
+      n.ticker,
+      n.comnam,
+      n.shrcls,
+      n.tsymbol,
+      n.naics,
+      n.primexch,
+      n.trdstat,
+      n.secstat
+    FROM crsp.dsenames AS n
+    JOIN sp500_permnos AS u
+      ON n.permno = u.permno
+    WHERE COALESCE(n.namedt, DATE '1900-01-01') <= DATE '2025-12-31'
+      AND COALESCE(n.nameendt, DATE '9999-12-31') >= DATE '2018-01-01'
+  partition:
+    type: year
+    start: 2018
+    end: 2018
+  date_columns:
+    - namedt
+    - nameendt
+  integrity:
+    non_null_columns:
+      - permno
+      - ticker

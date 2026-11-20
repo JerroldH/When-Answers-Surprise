@@ -1,0 +1,16 @@
+sample,period,stage,specification,treatment,outcome,horizon,coefficient_bps,se_bps,ci_low_bps,ci_high_bps,p_value,n_calls,unit,uncertainty
+holdout_2025,2025,Prepared,P0,prepared_innovation_z,CAR_0_1,1,99.0439946932,20.9661402643,57.9511148803,140.136874506,2.3125323283e-06,1901,bps_per_1sd,pointwise_firm_date_two_way_clustered
+holdout_2025,2025,Question,Q2,question_innovation_z,CAR_0_1,1,113.846253903,25.3764687553,64.1092890877,163.583218718,7.24733320587e-06,1901,bps_per_1sd,pointwise_firm_date_two_way_clustered
+holdout_2025,2025,Answer,A3,answer_innovation_z,CAR_0_1,1,61.4701976605,18.6557648651,24.9055704209,98.0348249002,0.000984319603354,1901,bps_per_1sd,pointwise_firm_date_two_way_clustered
+holdout_2025,2025,Prepared,P0,prepared_innovation_z,CAR_0_3,3,102.793356348,22.0875932519,59.5024690695,146.084243627,3.25721532885e-06,1901,bps_per_1sd,pointwise_firm_date_two_way_clustered
+holdout_2025,2025,Question,Q2,question_innovation_z,CAR_0_3,3,119.274660792,26.9346322478,66.4837516491,172.065569934,9.49782625733e-06,1901,bps_per_1sd,pointwise_firm_date_two_way_clustered
+holdout_2025,2025,Answer,A3,answer_innovation_z,CAR_0_3,3,64.1126831946,21.6507145451,21.6780624466,106.547303943,0.00306415882781,1901,bps_per_1sd,pointwise_firm_date_two_way_clustered
+holdout_2025,2025,Prepared,P0,prepared_innovation_z,CAR_0_5,5,107.593860388,23.9956638498,60.5632234572,154.624497319,7.3295269167e-06,1901,bps_per_1sd,pointwise_firm_date_two_way_clustered
+holdout_2025,2025,Question,Q2,question_innovation_z,CAR_0_5,5,120.405010358,28.3561248031,64.8280270031,175.981993714,2.17452795028e-05,1901,bps_per_1sd,pointwise_firm_date_two_way_clustered
+holdout_2025,2025,Answer,A3,answer_innovation_z,CAR_0_5,5,69.6352563219,24.5311633718,21.5550596144,117.715453029,0.00453055757758,1901,bps_per_1sd,pointwise_firm_date_two_way_clustered
+holdout_2025,2025,Prepared,P0,prepared_innovation_z,CAR_0_10,10,110.81685552,30.7163115729,50.6139910995,171.019719941,0.000308860685713,1901,bps_per_1sd,pointwise_firm_date_two_way_clustered
+holdout_2025,2025,Question,Q2,question_innovation_z,CAR_0_10,10,118.452372196,30.485996416,58.7009171876,178.203827204,0.000102132826476,1901,bps_per_1sd,pointwise_firm_date_two_way_clustered
+holdout_2025,2025,Answer,A3,answer_innovation_z,CAR_0_10,10,73.9381704134,29.0452993342,17.0104297982,130.865911029,0.0109085202672,1901,bps_per_1sd,pointwise_firm_date_two_way_clustered
+holdout_2025,2025,Prepared,P0,prepared_innovation_z,CAR_0_20,20,115.840974726,30.5097382636,56.0429865516,175.6389629,0.000146544949859,1901,bps_per_1sd,pointwise_firm_date_two_way_clustered
+holdout_2025,2025,Question,Q2,question_innovation_z,CAR_0_20,20,118.013370662,35.2660501939,48.8931824046,187.133558919,0.000818760715805,1901,bps_per_1sd,pointwise_firm_date_two_way_clustered
+holdout_2025,2025,Answer,A3,answer_innovation_z,CAR_0_20,20,54.9756455962,31.3251573184,-6.42053455797,116.37182575,0.0792593377777,1901,bps_per_1sd,pointwise_firm_date_two_way_clustered

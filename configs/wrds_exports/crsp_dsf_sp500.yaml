@@ -1,0 +1,84 @@
+connection:
+  username_env: WRDS_USER
+
+export:
+  output_dir: ./data/wrds_sp500_2018_2025/raw/wrds_exports
+  format: parquet
+  compression: snappy
+  chunksize: 250000
+  overwrite: false
+  resume: true
+  max_retries: 3
+  continue_on_error: false
+
+query:
+  name: crsp_dsf_sp500
+  sql: |
+    WITH sp500_permnos AS (
+      SELECT DISTINCT permno
+      FROM crsp.dsp500list_v2
+      WHERE mbrstartdt <= DATE '2025-12-31'
+        AND COALESCE(mbrenddt, DATE '9999-12-31') >= DATE '2018-01-01'
+    )
+    SELECT
+      a.permno,
+      a.permco,
+      a.date,
+      n.nameendt,
+      n.shrcd,
+      n.exchcd,
+      n.siccd,
+      n.ncusip,
+      n.ticker,
+      n.comnam,
+      n.shrcls,
+      n.tsymbol,
+      n.naics,
+      n.primexch,
+      n.trdstat,
+      n.secstat,
+      a.cusip,
+      a.bidlo,
+      a.askhi,
+      a.prc,
+      a.vol,
+      a.ret,
+      a.bid,
+      a.ask,
+      a.shrout,
+      a.cfacpr,
+      a.cfacshr,
+      a.openprc,
+      a.numtrd,
+      a.retx,
+      i.vwretd,
+      i.vwretx,
+      i.ewretd,
+      i.ewretx,
+      i.sprtrn
+    FROM crsp.dsf AS a
+    JOIN sp500_permnos AS u
+      ON a.permno = u.permno
+    LEFT JOIN crsp.dsenames AS n
+      ON a.permno = n.permno
+     AND a.date >= n.namedt
+     AND a.date <= n.nameendt
+    LEFT JOIN crsp.dsi AS i
+      ON a.date = i.date
+    WHERE a.date >= %(start_date)s
+      AND a.date < %(end_date)s
+      AND a.date >= DATE '2018-01-01'
+      AND a.date < DATE '2026-01-01'
+  partition:
+    type: year
+    start: 2018
+    end: 2025
+  date_columns:
+    - date
+    - nameendt
+  integrity:
+    non_null_columns:
+      - permno
+      - date
+      - prc
+      - ret

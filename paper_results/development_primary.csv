@@ -1,0 +1,2 @@
+sample,period,stage,specification,outcome,coefficient_bps,conditional_se_bps,adjusted_se_bps,ci_low_bps,ci_high_bps,adjusted_p_value,n_calls,unit,uncertainty
+development_2020_2024,2020-2024,Answer,A3,CAR_0_1,34.3196785124,6.55173225997,6.67607148836,21.2345783952,47.4047786296,2.73717268827e-07,9583,bps_per_1sd,firm_date_cluster_plus_200_first_stage_refits

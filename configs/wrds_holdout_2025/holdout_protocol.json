@@ -1,0 +1,97 @@
+{
+  "aggregation": "word-count weighted mean",
+  "clustering": [
+    "permno",
+    "event_trading_date"
+  ],
+  "contract": "finnlp-2025-holdout-v1",
+  "controls": [
+    "scaled_eps_surprise",
+    "eps_surprise",
+    "pre_ret_20",
+    "pre_vol_20",
+    "pre_log_dollar_volume_20",
+    "pre_amihud_illiquidity_20",
+    "analyst_coverage",
+    "forecast_dispersion",
+    "forecast_age_days",
+    "log_market_cap",
+    "match_date_gap_days",
+    "call_after_close",
+    "match_quality"
+  ],
+  "feature_contracts": [
+    "P0",
+    "Q2",
+    "A3"
+  ],
+  "fixed_effects": [
+    "permno",
+    "event_calendar_quarter"
+  ],
+  "frozen_at_utc": "2026-07-31T06:49:06.345568+00:00",
+  "frozen_revision_manifest_sha256": "8cf583a01dac21dcce482d715a5f91a88c159aa6430d77ae068eb69ca6f5804b",
+  "frozen_training_response_sha256": "b410509778d7455e665f6dc1737b5380661c0ce1c23b62df676537f7a495655b",
+  "frozen_training_response_source": "outputs/frozen/revision_v2_tuned/20260716_widegrid_v2/response_model_sample_revision_v2.parquet",
+  "population": "2025 point-in-time S&P 500 earnings calls",
+  "primary_model": "P0/Q2/A3 joint response model",
+  "primary_outcome": "CAR_0_1",
+  "report_all_results_regardless_of_direction_or_significance": true,
+  "ridge_alpha_grid": [
+    0.01,
+    0.1,
+    1.0,
+    10.0,
+    30.0,
+    100.0,
+    300.0,
+    1000.0,
+    3000.0,
+    10000.0,
+    30000.0,
+    100000.0,
+    300000.0,
+    1000000.0,
+    3000000.0,
+    10000000.0,
+    30000000.0,
+    100000000.0
+  ],
+  "secondary_analyses": [
+    "other CAR horizons",
+    "2025 pooled interaction if the CIZ-SIZ bridge passes",
+    "pre-event checks"
+  ],
+  "selection_rule": "inner expanding-year MAE",
+  "status": "frozen_before_2025_response",
+  "test_year": 2025,
+  "training_standardization": {
+    "answer_innovation_z": {
+      "mean_2020_2024": 1.0866987195795281,
+      "n_2020_2024": 9583,
+      "raw_column": "answer_innovation",
+      "sd_2020_2024": 4.136859593298742
+    },
+    "prepared_innovation_z": {
+      "mean_2020_2024": 0.43779632330641416,
+      "n_2020_2024": 9583,
+      "raw_column": "prepared_innovation",
+      "sd_2020_2024": 6.151264368619149
+    },
+    "question_innovation_z": {
+      "mean_2020_2024": 0.0020270618187504803,
+      "n_2020_2024": 9583,
+      "raw_column": "question_innovation",
+      "sd_2020_2024": 5.87176413717407
+    }
+  },
+  "training_years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+  ]
+}

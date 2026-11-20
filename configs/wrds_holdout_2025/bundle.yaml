@@ -1,0 +1,25 @@
+contract: finnlp-2025-holdout-wrds-v1
+output_dir: ./data/wrds_holdout_2025_ciz/raw/wrds_exports
+partition_start: 2024
+partition_end: 2025
+
+# These configs are resolved into the isolated raw directory by
+# export_holdout_2025_wrds.py.  The passthrough queries retain their original
+# SQL but receive the isolated output root and 2024--2025 partitions.
+custom_configs:
+  - crsp_ciz_daily_2024_2025.yaml
+  - crsp_ciz_index_2024_2025.yaml
+  - crsp_ciz_security_history_2024_2025.yaml
+  - ciq_transcript_events_2024_2025.yaml
+  - ciq_transcript_components_2024_2025.yaml
+
+passthrough_configs:
+  - ../wrds_exports/crsp_sp500_membership.yaml
+  - ../wrds_exports/crsp_ccmxpf_linktable_sp500.yaml
+  - ../wrds_exports/wrdsapps_ibcrsphist_sp500.yaml
+  - ../wrds_exports/ciq_gvkey_sp500.yaml
+  - ../wrds_exports/ibes_statsum_epsus_sp500.yaml
+  - ../wrds_exports/ibes_act_epsus_sp500.yaml
+  - ../wrds_exports/comp_fundq_sp500.yaml
+  - ../wrds_exports/comp_funda_sp500.yaml
+  - ../wrds_exports/comp_secd_sp500.yaml

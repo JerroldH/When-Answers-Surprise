@@ -1,0 +1,4 @@
+measure,left,right,n_common,pearson,spearman,sign_agreement
+standardized_call_level_A3,Gemini,DeepSeek,1901,0.5656947516757527,0.4841666877006544,0.6570226196738559
+standardized_call_level_A3,Gemini,LM,1901,0.2705280664109759,0.28276071482253323,0.6038926880589164
+standardized_call_level_A3,DeepSeek,LM,1901,0.2216866227942524,0.2114885888505774,0.5639137296159916

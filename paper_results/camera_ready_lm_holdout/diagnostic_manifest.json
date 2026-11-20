@@ -1,0 +1,10 @@
+{
+  "same_sample_all": true,
+  "raw_A3_correlation_on_response_calls": 0.7245898924911768,
+  "outputs": [
+    {
+      "path": "holdout_lm_response_diagnostic.csv",
+      "sha256": "496088133ed6ff156fc6d3355e318aa2e5d59236c16538560f6cc81936239476"
+    }
+  ]
+}

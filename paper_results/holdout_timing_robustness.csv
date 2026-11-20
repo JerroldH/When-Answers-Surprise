@@ -1,0 +1,10 @@
+result_type,specification,term,beta,standard_error,p_value,beta_bps,standard_error_bps,ci_low_bps,ci_high_bps,n_calls,n_firms,n_event_dates,joint_wald_chi2,joint_df,uncertainty
+subsample_estimate,full,answer_innovation_z,0.00614701978562,0.00186557648563,0.000984319561198,61.4701978562,18.6557648563,24.9048987378,98.0354969746,1901,499,173,,,conditional firm/date two-way clustered
+subsample_estimate,exclude_market_hours,answer_innovation_z,0.00640628665442,0.00235740826055,0.00657746506883,64.0628665442,23.5740826055,17.8576646375,110.268068451,1351,370,160,,,conditional firm/date two-way clustered
+subsample_estimate,premarket,answer_innovation_z,0.00567912772292,0.00284438730654,0.0458677345238,56.7912772292,28.4438730654,1.04128602098,112.541268437,871,244,127,,,conditional firm/date two-way clustered
+subsample_estimate,market_hours,answer_innovation_z,0.00558041085441,0.00291358784171,0.0554535530041,55.8041085441,29.1358784171,-1.30221315344,112.910430242,550,156,114,,,conditional firm/date two-way clustered
+subsample_estimate,after_close,answer_innovation_z,0.00811387810746,0.00487494043406,0.0960314038021,81.1387810746,48.7494043406,-14.4100514328,176.687613582,480,135,110,,,conditional firm/date two-way clustered
+timing_interaction_estimate,premarket_base_interactions,answer_innovation_z,0.0052608210948,0.00277768740049,0.0582306890393,52.608210948,27.7768740049,-1.83446210158,107.050883998,1901,499,173,,,conditional firm/date two-way clustered
+timing_interaction_estimate,premarket_base_interactions,answer_x_market_hours,0.000464019225919,0.00390386169755,0.905385009179,4.64019225919,39.0386169755,-71.8754970127,81.1558815311,1901,499,173,,,conditional firm/date two-way clustered
+timing_interaction_estimate,premarket_base_interactions,answer_x_after_close,0.00288552820867,0.00563168242344,0.608389214542,28.8552820867,56.3168242344,-81.5256934128,139.236257586,1901,499,173,,,conditional firm/date two-way clustered
+joint_timing_equality_test,premarket_base_interactions,answer_effect_equal_across_timing_buckets,,,0.872944000309,,,,,1901,499,173,0.271767742934,2,conditional firm/date two-way clustered Wald test

@@ -1,0 +1,89 @@
+connection:
+  username_env: WRDS_USER
+
+export:
+  output_dir: ./data/wrds_sp500_2018_2025/raw/wrds_exports
+  format: parquet
+  compression: snappy
+  chunksize: 250000
+  overwrite: false
+  resume: true
+  max_retries: 3
+  continue_on_error: false
+
+query:
+  name: ibes_statsum_epsus_sp500
+  sql: |
+    WITH sp500_permnos AS (
+      SELECT DISTINCT permno
+      FROM crsp.dsp500list_v2
+      WHERE mbrstartdt <= DATE '2025-12-31'
+        AND COALESCE(mbrenddt, DATE '9999-12-31') >= DATE '2018-01-01'
+    ),
+    sp500_tickers AS (
+      SELECT DISTINCT UPPER(n.ticker) AS ticker
+      FROM crsp.dsenames AS n
+      JOIN sp500_permnos AS u
+        ON n.permno = u.permno
+      WHERE n.ticker IS NOT NULL
+        AND COALESCE(n.namedt, DATE '1900-01-01') <= DATE '2025-12-31'
+        AND COALESCE(n.nameendt, DATE '9999-12-31') >= DATE '2018-01-01'
+    )
+    SELECT
+      s.ticker,
+      s.cusip,
+      s.oftic,
+      s.cname,
+      s.statpers,
+      s.measure,
+      s.fiscalp,
+      s.fpi,
+      s.estflag,
+      s.curcode,
+      s.numest,
+      s.numup,
+      s.numdown,
+      s.medest,
+      s.meanest,
+      s.stdev,
+      s.highest,
+      s.lowest,
+      s.usfirm,
+      s.fpedats,
+      CAST(NULL AS double precision) AS actual,
+      CAST(NULL AS date) AS anndats_act,
+      CAST(NULL AS time) AS anntims_act,
+      CAST(NULL AS text) AS curr_act
+    FROM ibes.statsum_epsus AS s
+    WHERE s.statpers >= %(start_date)s
+      AND s.statpers < %(end_date)s
+      AND s.statpers >= DATE '2017-01-01'
+      AND s.statpers < DATE '2026-02-01'
+      AND s.measure = 'EPS'
+      AND s.fpi IN ('6', '7', '8', '9')
+      AND (
+        EXISTS (
+          SELECT 1
+          FROM wrdsapps_link_crsp_ibes.ibcrsphist AS l
+          JOIN sp500_permnos AS u
+            ON l.permno = u.permno
+          WHERE (s.ticker = l.ticker OR s.oftic = l.ticker)
+            AND s.statpers >= COALESCE(l.sdate, DATE '1900-01-01')
+            AND s.statpers <= COALESCE(l.edate, DATE '9999-12-31')
+        )
+        OR UPPER(s.oftic) IN (SELECT ticker FROM sp500_tickers)
+        OR UPPER(s.ticker) IN (SELECT ticker FROM sp500_tickers)
+      )
+  partition:
+    type: year
+    start: 2017
+    end: 2026
+  date_columns:
+    - statpers
+    - fpedats
+    - anndats_act
+  integrity:
+    non_null_columns:
+      - ticker
+      - statpers
+      - meanest

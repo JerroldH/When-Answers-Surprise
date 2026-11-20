@@ -1,0 +1,53 @@
+connection:
+  username_env: WRDS_USER
+
+export:
+  output_dir: ./data/wrds_holdout_2025_ciz/raw/wrds_exports
+  format: parquet
+  compression: snappy
+  chunksize: 250000
+  overwrite: false
+  resume: false
+  max_retries: 3
+  continue_on_error: false
+
+query:
+  name: crsp_ciz_security_history_holdout
+  sql: |
+    WITH sp500_permnos AS (
+      SELECT DISTINCT permno
+      FROM crsp.dsp500list_v2
+      WHERE mbrstartdt <= DATE '2025-12-31'
+        AND COALESCE(mbrenddt, DATE '9999-12-31') >= DATE '2024-01-01'
+    )
+    SELECT
+      s.permno,
+      s.secInfoStartDt,
+      s.secInfoEndDt,
+      s.cusip,
+      s.ticker,
+      s.issuerNm,
+      s.primaryExch,
+      s.shareType,
+      s.securityType,
+      s.securitySubType,
+      s.usIncFlg,
+      s.issuerType,
+      s.conditionalType,
+      s.tradingStatusFlg
+    FROM crsp.stkSecurityInfoHist AS s
+    JOIN sp500_permnos AS u
+      ON s.permno = u.permno
+    WHERE COALESCE(s.secInfoStartDt, DATE '1900-01-01') <= DATE '2025-12-31'
+      AND COALESCE(s.secInfoEndDt, DATE '9999-12-31') >= DATE '2024-01-01'
+  partition:
+    type: year
+    start: 2024
+    end: 2024
+  date_columns:
+    - secInfoStartDt
+    - secInfoEndDt
+  integrity:
+    non_null_columns:
+      - permno
+      - secInfoStartDt

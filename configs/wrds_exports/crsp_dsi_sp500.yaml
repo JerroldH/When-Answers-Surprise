@@ -1,0 +1,43 @@
+connection:
+  username_env: WRDS_USER
+
+export:
+  output_dir: ./data/wrds_sp500_2018_2025/raw/wrds_exports
+  format: parquet
+  compression: snappy
+  chunksize: 250000
+  overwrite: false
+  resume: true
+  max_retries: 3
+  continue_on_error: false
+
+query:
+  name: crsp_dsi_sp500
+  sql: |
+    SELECT
+      date,
+      vwretd,
+      vwretx,
+      ewretd,
+      ewretx,
+      sprtrn,
+      spindx,
+      totval,
+      totcnt,
+      usdval,
+      usdcnt
+    FROM crsp.dsi
+    WHERE date >= %(start_date)s
+      AND date < %(end_date)s
+      AND date >= DATE '2018-01-01'
+      AND date < DATE '2026-01-01'
+  partition:
+    type: year
+    start: 2018
+    end: 2025
+  date_columns:
+    - date
+  integrity:
+    non_null_columns:
+      - date
+      - vwretd

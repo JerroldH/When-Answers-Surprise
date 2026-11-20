@@ -1,0 +1,149 @@
+tasks:
+  export_raw_wrds:
+    script: scripts/00_data_access/export_wrds_raw.py
+    group: data_access
+    description: Run WRDS export YAML configs and write private raw parquet.
+  export_holdout_2025_wrds:
+    script: scripts/00_data_access/export_holdout_2025_wrds.py
+    group: data_access
+    description: Export isolated 2024--2025 CIZ, CIQ, IBES, and Compustat inputs for
+      the 2025 holdout.
+  resume_holdout_2025_wrds:
+    script: scripts/00_data_access/resume_holdout_2025_wrds.py
+    group: data_access
+    description: Recover a partial holdout export with fixed event-ID component batches
+      and query-level resume.
+  build_security_master:
+    script: scripts/10_staging/build_security_master.py
+    group: staging
+    description: Build S&P 500 membership and identifier crosswalk staging tables.
+  stage_ibes:
+    script: scripts/10_staging/stage_ibes.py
+    group: staging
+    description: Stage IBES summary snapshots with actual EPS fields.
+  stage_ciq_transcripts:
+    script: scripts/10_staging/stage_ciq_transcripts.py
+    group: staging
+    description: Stage Capital IQ transcript events, components, and text.
+  match_transcripts_to_ibes:
+    script: scripts/10_staging/match_transcripts_to_ibes.py
+    group: staging
+    description: Match transcript events to pre-event IBES EPS snapshots.
+  build_staging_dag:
+    script: scripts/10_staging/build_staging_dag.py
+    group: staging
+    description: Run staging tasks and write file/checksum manifests.
+  run_lm_baseline:
+    script: scripts/20_empirical/run_lm_baseline.py
+    group: empirical
+    description: Build LM tone innovations and estimate market-response regressions.
+  run_strict_lm_panel:
+    script: scripts/20_empirical/run_strict_lm_panel.py
+    group: empirical
+    description: Re-estimate the LM response on one strict development and holdout panel.
+  run_lm_diagnostics:
+    script: scripts/20_empirical/run_lm_diagnostics.py
+    group: empirical
+    description: Run diagnostics over existing LM tone outputs.
+  run_learner_audit:
+    script: scripts/20_empirical/run_learner_audit.py
+    group: empirical
+    description: Compare first-stage learners on a common response sample.
+  run_revision_v2:
+    script: scripts/20_empirical/run_revision_v2.py
+    group: empirical
+    description: Build Q0-Q2 and A0-A3 revision-v2 residuals and conditional responses.
+  run_revision_v2_tuned:
+    script: scripts/20_empirical/run_revision_v2_tuned.py
+    group: empirical
+    description: Re-estimate P0, Q0-Q2, and A0-A3 with outcome-blind time-forward
+      tuned Ridge.
+  run_revision_v2_bootstrap:
+    script: scripts/20_empirical/run_revision_v2_bootstrap.py
+    group: empirical
+    description: Run or resume the 200-replicate firm-history first-stage refit bootstrap.
+  run_revision_v2_tuned_bootstrap:
+    script: scripts/20_empirical/run_revision_v2_tuned_bootstrap.py
+    group: empirical
+    description: Run init, checkpointed workers, or finalization for the 200-replicate
+      tuned-Ridge bootstrap.
+  build_holdout_2025:
+    script: scripts/20_empirical/build_holdout_2025.py
+    group: empirical
+    description: Build the 2024 CIZ--SIZ bridge and outcome-blind 2018--2025 holdout
+      feature frames.
+  run_holdout_2025:
+    script: scripts/20_empirical/run_holdout_2025.py
+    group: empirical
+    description: Freeze 2025 residuals before estimating response and checkpointed
+      first-stage refits.
+  freeze_holdout_2025:
+    script: scripts/20_empirical/freeze_holdout_2025.py
+    group: empirical
+    description: Freeze complete 2025 holdout evidence after the bridge, response,
+      and 200 refits.
+  freeze_revision_v2:
+    script: scripts/20_empirical/freeze_revision_v2.py
+    group: empirical
+    description: Freeze validated revision-v2 tables and covariance artifacts with
+      checksums.
+  freeze_a3_learner_audit:
+    script: scripts/20_empirical/freeze_a3_learner_audit.py
+    group: empirical
+    description: Freeze the completed A3 learner sensitivity audit with input and
+      code provenance.
+  freeze_paper_results:
+    script: scripts/20_empirical/freeze_paper_results.py
+    group: empirical
+    description: Freeze paper-facing empirical results from baseline diagnostics.
+  run_sequential_validation:
+    script: scripts/30_validation/run_sequential_validation.py
+    group: validation
+    description: Build filtration ladder and nuisance-stress validation outputs.
+  run_pre_event_audit:
+    script: scripts/30_validation/run_pre_event_audit.py
+    group: validation
+    description: Audit non-overlapping pre-event returns and call-timing alignment.
+  run_revision_v2_event_audit:
+    script: scripts/30_validation/run_revision_v2_event_audit.py
+    group: validation
+    description: Audit daily AR[-20,-1] and Q0-Q2 timing on the fixed revision-v2
+      sample.
+  run_holdout_2025_timing_audit:
+    script: scripts/30_validation/run_holdout_2025_timing_audit.py
+    group: validation
+    description: Audit four five-day bins, daily AR[-20,-1], and announcement alignment
+      on the fixed 2025 holdout.
+  run_revision_v2_supplement_audits:
+    script: scripts/30_validation/run_revision_v2_supplement_audits.py
+    group: validation
+    description: Derive aggregation, pre-event precision, bootstrap convergence, and
+      fold diagnostics from the frozen revision-v2 evidence.
+  run_revision_v2_learner_audit:
+    script: scripts/30_validation/run_revision_v2_learner_audit.py
+    group: validation
+    description: Compare fixed/tuned Ridge, ElasticNet, HGB, and Random Forest for
+      A3.
+  score_answers_online:
+    script: scripts/40_llm_appendix/score_answers_online.py
+    group: llm_appendix
+    description: Score answer tone with an online or fake LLM provider.
+  manage_gemini_batch:
+    script: scripts/40_llm_appendix/manage_gemini_batch.py
+    group: llm_appendix
+    description: Prepare, submit, inspect, download, and import Vertex/ADC Gemini
+      batch scores.
+  manage_gemini_api_batch:
+    script: scripts/40_llm_appendix/manage_gemini_api_batch.py
+    group: llm_appendix
+    description: Prepare, submit, inspect, download, and import API-key Gemini batch
+      scores.
+  analyze_answer_tone:
+    script: scripts/40_llm_appendix/analyze_answer_tone.py
+    group: llm_appendix
+    description: Analyze cached LLM answer-tone scores.
+  analyze_holdout_answer_tone:
+    script: scripts/40_llm_appendix/analyze_holdout_answer_tone.py
+    group: llm_appendix
+    description: Run nested time-forward A0--A3 analysis on completed 2025 LLM score
+      caches.

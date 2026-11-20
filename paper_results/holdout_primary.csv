@@ -1,0 +1,4 @@
+sample,period,stage,specification,treatment,outcome,horizon,coefficient_bps,conditional_se_bps,adjusted_se_bps,ci_low_bps,ci_high_bps,conditional_p_value,adjusted_p_value,n_calls,n_firms,n_event_dates,unit,uncertainty
+holdout_2025,2025,Prepared,P0,prepared_innovation_z,CAR_0_1,1,99.0439946931,20.9661402643,21.1516799001,57.586702089,140.501287297,2.31253232834e-06,2.83315237247e-06,1901,499,173,bps_per_1sd,firm_date_cluster_plus_200_first_stage_refits
+holdout_2025,2025,Question,Q2,question_innovation_z,CAR_0_1,1,113.846253903,25.3764687553,25.3878924002,64.0859847984,163.606523007,7.24733320583e-06,7.3162762535e-06,1901,499,173,bps_per_1sd,firm_date_cluster_plus_200_first_stage_refits
+holdout_2025,2025,Answer,A3,answer_innovation_z,CAR_0_1,1,61.4701976606,18.6557648651,18.7175323153,24.7838343225,98.1565609986,0.00098431960336,0.00102309587651,1901,499,173,bps_per_1sd,firm_date_cluster_plus_200_first_stage_refits
