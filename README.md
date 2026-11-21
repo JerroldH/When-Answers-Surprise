@@ -1,11 +1,26 @@
 # When Answers Surprise
 
-Replication materials for Jerrold Huang and Nathan Zhang, *When Answers Surprise:
-Sequential Tone Residualization and Abnormal Returns in Earnings Calls*
-([ICAIF 2026](https://doi.org/10.1145/3858063.3858890)).
+*Sequential Tone Residualization and Abnormal Returns in Earnings Calls*
 
-## Rebuild the paper exhibits
+Jerrold Huang and Nathan Zhang · ACM ICAIF 2026
 
+[Paper (standalone author version, 23-page PDF)](docs/when-answers-surprise.pdf) ·
+[Oral presentation (PDF, 15 slides + appendix)](docs/icaif-2026-slides.pdf) ·
+[ACM publication](https://doi.org/10.1145/3858063.3858890)
+
+How much of a manager’s tone could you have anticipated before hearing the answer?
+We estimate expected tone from what was already available, including the analyst’s
+question and the earlier conversation. Slides 5–6 walk through an answer that
+sounds positive but falls short of what the question led the model to expect.
+
+In a held-out sample of 1,901 earnings calls from 2025, a one-standard-deviation increase
+in call-level answer surprise was associated with a 0.615 percentage point higher
+one-day market-adjusted return (95% CI 0.248 to 0.982 percentage points).
+
+## Rebuild the ICAIF proceedings exhibits
+
+The figure and table numbers below refer to the ACM proceedings version.
+The standalone paper includes additional examples and technical appendices.
 From this repository's root, with Python 3.12 and uv:
 
 ```sh
@@ -27,11 +42,10 @@ anchors, and writes:
 | Tables 1, 2, 3 | `tables/table{1_primary,2_credibility,3_holdout_ladder}.tex` | Camera-ready table generators and frozen aggregates |
 
 The statistical figures are generated as PDF, SVG and PNG. The tables are LaTeX
-fragments for the paper, not standalone documents. For orientation, Table 1
-reports a **61.47 bps** full-context answer coefficient across **1,901** holdout
-calls (adjusted SE 18.72). Its scale is one development-sample residual SD.
-Table 3 instead uses a common raw-tone SD and conditional clustered SEs. The
-two tables should not be expected to have identical coefficients.
+fragments for the paper. Table 1 scales each residual by its development-sample
+standard deviation and includes first-stage estimation uncertainty. Table 3
+compares tone measures on a common raw-tone scale with conditional clustered
+standard errors.
 
 ## Re-estimation with licensed inputs
 
@@ -44,12 +58,21 @@ a missing, truncated or different CSV stops the run. This route does not call
 an LLM. Re-estimating the alternative scores separately requires provider
 access and permission to process the inputs.
 
-No transcripts, excerpts, security-level returns, event panels, turn-level
-scores, API responses or credentials are distributed. The CSVs in
-`paper_results/` contain aggregate estimates only. Licensed inputs remain
-subject to their providers' terms.
+Table 1 of the standalone paper illustrates three exchanges with short, masked
+transcript excerpts. The CSVs in `paper_results/` contain aggregate estimates.
+Full transcripts, security-level returns, event panels, turn-level scores, API
+responses and credentials are excluded from the package.
 
 Source snapshot: `codex/camera-ready`, commit
 `76ec9d2d104a2a31cf3ce2aa0a90b825abf83597`. The private research repository
 and its commit history are not part of this package.
+
+## License
+
+The replication code is available under the [MIT License](LICENSE).
+The authors’ original content in the paper and slides is available under
+[Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/).
+Credit Jerrold Huang and Nathan Zhang when reusing it. Third-party materials,
+including quoted transcript text, and the underlying commercial data remain
+subject to their respective rights and terms.
 
